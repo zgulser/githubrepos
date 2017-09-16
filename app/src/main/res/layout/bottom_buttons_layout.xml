@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="5dp"
+    android:background="@android:color/holo_orange_light">
+
+    <Button
+        android:id="@+id/buttonLeft"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="left"/>
+
+    <Button
+        android:id="@+id/buttonRight"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="right"/>
+
+</LinearLayout>

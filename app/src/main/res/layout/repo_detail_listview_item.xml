@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/ownerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_gravity="left|center"
+            style="@style/titleTextViewStyle"
+            android:text="@string/activity_repo_detail_starred_title" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_gravity="right|center"
+            android:src="@drawable/right_carret"/>
+    </FrameLayout>
+</layout>

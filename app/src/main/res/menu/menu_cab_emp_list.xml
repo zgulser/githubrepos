@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.payconiq.zekigu.githubrepos.ui.views.RepoDetailActivity">
+    <item
+        android:id="@+id/actionShare"
+        android:orderInCategory="100"
+        android:title=""
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionRemove"
+        android:orderInCategory="100"
+        android:title=""
+        android:icon="@android:drawable/ic_menu_delete"
+        app:showAsAction="never" />
+</menu>

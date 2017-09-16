@@ -1,0 +1,81 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="false">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.AppBarOverlay">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    android:nestedScrollingEnabled="true"
+                    app:layout_scrollFlags="scroll|enterAlways" />
+
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeToRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/reposRecyclerView"
+                    android:scrollbars="vertical"
+                    android:background="@android:color/white"
+                    android:divider="@android:color/darker_gray"
+                    android:dividerHeight="1dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+            <LinearLayout
+                android:id="@+id/emptyViewLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/empty_view"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Empty Repo List"
+                    style="@style/titleEmptyViewTextViewStyle"
+                    android:gravity="center|center_horizontal" />
+
+            </LinearLayout>
+
+
+        </android.support.design.widget.CoordinatorLayout>
+
+        <ViewStub
+            android:id="@+id/bottomButtons"
+            android:inflatedId="@+id/bottomButtonsInflated"
+            android:layout="@layout/bottom_buttons_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+</layout>

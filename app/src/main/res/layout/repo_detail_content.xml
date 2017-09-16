@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.payconiq.zekigu.githubrepos.ui.views.RepoDetailActivity"
+        tools:showIn="@layout/activity_repo_detail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
+                style="@style/headerTextViewStyle"
+                android:text="@string/activity_repo_title_uppercase"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/darkerLightGray"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+            </View>
+
+            <include
+                android:id="@+id/topView"
+                layout="@layout/repo_detail_top_view" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
+                style="@style/headerTextViewStyle"
+                android:text="@string/activity_repo_detail_owner_title_uppercase"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/darkerLightGray"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp">
+            </View>
+
+            <include
+                android:id="@+id/ownerView"
+                layout="@layout/repo_detail_owner_view" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</layout>

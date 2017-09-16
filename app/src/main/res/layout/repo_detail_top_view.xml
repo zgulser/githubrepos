@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/repoBasicInformationLyt"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_gravity="top"
+                style="@style/titleTextViewStyle"
+                android:text="@string/activity_repo_detail_fullname_title" />
+
+            <TextView
+                android:id="@+id/fullnameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_gravity="bottom"
+                android:ellipsize="end"
+                style="@style/valueTextViewStyle"
+                android:text="Syd" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_gravity="top"
+                style="@style/titleTextViewStyle"
+                android:text="@string/activity_repo_detail_desc_title" />
+
+            <TextView
+                android:id="@+id/descTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_gravity="bottom"
+                android:ellipsize="end"
+                style="@style/valueTextViewStyle"
+                android:text="Barrett" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_gravity="top"
+                style="@style/titleTextViewStyle"
+                android:text="@string/activity_repo_detail_url_title" />
+
+            <TextView
+                android:id="@+id/urlTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_gravity="bottom"
+                android:ellipsize="end"
+                style="@style/valueTextViewStyle"
+                android:text="Barrett" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

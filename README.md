@@ -1,2 +1,7 @@
 # githubrepos
-lists github repos in a list, gives detail on item click, provides disk caching mechanism (offline mode)
+
+Simple app to list all public git repos using GIT API.
+
+Uses state of art material design elements.
+
+
