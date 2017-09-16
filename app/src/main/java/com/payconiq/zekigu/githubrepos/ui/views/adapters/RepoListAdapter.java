@@ -113,7 +113,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoIt
         pHolder.name.setText(repo.getName());
         pHolder.privacyStatusName.setText(repo.isPrivate() ? activityContext.getString(R.string.private_string)
                 : activityContext.getString(R.string.public_string));
-        pHolder.ownerName.setText(githubRepo.getLogin());
+        pHolder.ownerName.setText(githubRepo.getOwnerLoginName());
 
         ApplicationManager.getInstance().getImageLoader().loadImageByUrl(
                 Uri.parse(githubRepo.getOwnerAvatarUrl()),

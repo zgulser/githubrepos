@@ -1,7 +1,11 @@
 package com.payconiq.zekigu.githubrepos.core.model.container;
 
+import android.content.Context;
+
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
+import com.payconiq.zekigu.githubrepos.core.model.data.GithubRepo;
+import com.payconiq.zekigu.githubrepos.core.persistency.PersistencyManager;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastConstants;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastSender;
 
@@ -12,22 +16,29 @@ import java.util.ArrayList;
  */
 public class RepoContainer implements RepoNotifierContract {
 
-    private ArrayList<BaseRepo> repositories = new ArrayList<BaseRepo>();
+    private ArrayList<BaseRepo> repositories;
     private ArrayList<BaseRepo> searchedRepositories;
-    private boolean inSearchMode = false;
+    private boolean inSearchMode;
     private RepoReporterContract repoReporter;
+    private PersistencyManager persistencyManager;
+
+    public RepoContainer(Context context) {
+        this.repositories = new ArrayList<>();
+        this.persistencyManager = new PersistencyManager(context);
+    }
 
     public void addRepoReporter(RepoReporterContract repoReporter) {
         this.repoReporter = repoReporter;
     }
 
-    public synchronized void addRepo(BaseRepo pRepo) {
-        repositories.add(pRepo);
+    public synchronized void addRepo(BaseRepo repo) {
+        repositories.add(repo);
+        persistencyManager.saveRepo(repo);
         repoAdded();
     }
 
-    public synchronized void removeRepo(BaseRepo pRepo) {
-        repositories.remove(pRepo);
+    public synchronized void removeRepo(BaseRepo repo) {
+        repositories.remove(repo);
         repoRemoved();
     }
 
@@ -79,6 +90,10 @@ public class RepoContainer implements RepoNotifierContract {
     }
 
     public RepoReporterContract getRepoReporter() { return repoReporter;}
+
+    public PersistencyManager getPersistencyManager() {
+        return persistencyManager;
+    }
 
     public void setInSearchMode(boolean inSearchMode) {
         this.inSearchMode = inSearchMode;

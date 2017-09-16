@@ -6,21 +6,21 @@ import com.payconiq.zekigu.githubrepos.core.utils.HttpConstants;
 /**
  * Created by zekigu on 15.09.2017
  */
-public class HttpRequest implements Request {
+public class HttpRequestService implements HttpRequestContract {
 
-    private RepoRequestContract repoRequestContract;
+    private RepoRequestContract repoRequestService;
 
-    public HttpRequest(){
+    public HttpRequestService(){
     }
 
     public void addRepoRequesContract(RepoRequestContract pRepoRequestHandler){
-        repoRequestContract = pRepoRequestHandler;
+        repoRequestService = pRepoRequestHandler;
     }
 
     @Override
     public void request(HttpConstants.HttpRequestTypes pType) {
         if(pType == HttpConstants.HttpRequestTypes.RETRIEVE_REPOS){
-            repoRequestContract.retrieveRepos();
+            repoRequestService.retrieveRepos();
         }
     }
 }

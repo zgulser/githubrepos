@@ -69,9 +69,9 @@ public class JSONParser implements ParseStrategy {
                 .observeOn(AndroidSchedulers.mainThread()) // Use the UI thread
                 .subscribe(new Action1<BaseRepo>() {
                     @Override
-                    public void call(BaseRepo pBaseRepo) {
-                        if(pBaseRepo != null) {
-                            ApplicationManager.getInstance().getRepoContainer().addRepo(pBaseRepo);
+                    public void call(BaseRepo repo) {
+                        if(repo != null) {
+                            ApplicationManager.getInstance().getRepoContainer().addRepo(repo);
                         }
                     }
                 });
@@ -86,9 +86,9 @@ public class JSONParser implements ParseStrategy {
             boolean privateRepo = repo.getBoolean(ParserConstants.PRIVATE_FIELD);
             boolean fork = repo.getBoolean(ParserConstants.FORK_FIELD);
             String url = repo.getString(ParserConstants.URL_FIELD);
-            String htmlUrl = repo.getString(ParserConstants.HTML_URL_FIELD);
+
             GithubRepo githubRepo = RepoFactory.createGithubRepo(id, name, fullname, description,
-                    privateRepo, fork, url, htmlUrl);
+                    privateRepo, fork, url);
 
             JSONObject owner = repo.getJSONObject(ParserConstants.OWNER_OBJECT_FIELD);
             addOwner(githubRepo, owner);
@@ -103,18 +103,12 @@ public class JSONParser implements ParseStrategy {
 
     private void addOwner(final GithubRepo repo, final JSONObject owner) {
         try {
-            repo.setLogin(owner.getString(ParserConstants.OWNER_LOGIN_FIELD));
-            repo.setOwnerObjectId(owner.getString(ParserConstants.OWNER_ID_FIELD));
-            repo.setType(owner.getString(ParserConstants.OWNER_TYPE_FIELD));
-            repo.setOwnerAvatarUrl(owner.getString(ParserConstants.OWNER_AVATARURL_FIELD));
-            repo.setOwnerGravatarId(owner.getString(ParserConstants.OWNER_GRAVATAR_ID_FIELD));
-            repo.setOwnerUrl(owner.getString(ParserConstants.OWNER_URL_FIELD));
-            repo.setOwnerHtmlUrl(owner.getString(ParserConstants.OWNER_HTMLURL_FIELD));
-            repo.setFollowersUrl(owner.getString(ParserConstants.OWNER_FOLLOWERSURL_FIELD));
-            repo.setFollowingUrl(owner.getString(ParserConstants.OWNER_FOLLOWINGSURL_FIELD));
-            repo.setStarredsUrl(owner.getString(ParserConstants.OWNER_FOLLOWINGSURL_FIELD));
-            repo.setSubscriptionsUrl(owner.getString(ParserConstants.OWNER_SUBSURL_FIELD));
-            repo.setReposUrl(owner.getString(ParserConstants.OWNER_REPOSURL_FIELD));
+            repo.setOwner(RepoFactory.createGithubRepoOwner(owner.getString(ParserConstants.OWNER_LOGIN_FIELD),
+                    owner.getString(ParserConstants.OWNER_ID_FIELD), owner.getString(ParserConstants.OWNER_AVATARURL_FIELD),
+                    owner.getString(ParserConstants.OWNER_USER_URL_FIELD), owner.getString(ParserConstants.OWNER_FOLLOWERSURL_FIELD),
+                    owner.getString(ParserConstants.OWNER_FOLLOWINGSURL_FIELD), owner.getString(ParserConstants.OWNER_STARREDURL_FIELD),
+                    owner.getString(ParserConstants.OWNER_SUBSURL_FIELD), owner.getString(ParserConstants.OWNER_REPOSURL_FIELD),
+                    owner.getString(ParserConstants.OWNER_TYPE_FIELD), owner.getBoolean(ParserConstants.OWNER_ADMIN_FIELD)));
         } catch (JSONException je){
             je.printStackTrace();
         }

@@ -1,19 +1,24 @@
 package com.payconiq.zekigu.githubrepos.core.model.data;
 
-/**
- * Created by zekigu on 15.09.2017.
- */
-public abstract class BaseRepo {
+import com.orm.SugarRecord;
 
-    protected String id;
+/**
+ * Created by zekigu on 15.09.2017
+ */
+public abstract class BaseRepo extends SugarRecord<BaseRepo>{
+
+    protected String repoId;
     protected String name;
     protected String fullName;
     protected String desc;
     protected String url;
     protected boolean isPrivate;
 
+    public BaseRepo(){
+    }
+
     BaseRepo(String id, String name, String fullName, String desc, String url, boolean isPrivate){
-        this.id = id;
+        this.repoId = id;
         this.name = name;
         this.fullName = fullName;
         this.desc = desc;
@@ -21,12 +26,12 @@ public abstract class BaseRepo {
         this.isPrivate = isPrivate;
     }
 
-    public String getId() {
-        return id;
+    public String getRepoId() {
+        return repoId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String repoId) {
+        this.repoId = repoId;
     }
 
     public String getName() {
@@ -58,7 +63,7 @@ public abstract class BaseRepo {
     }
 
     public abstract String getOwnerAvatarUrl();
-    public abstract String getLogin();
-    public abstract String getType();
+    public abstract String getOwnerLoginName();
+    public abstract String getOwnerType();
     public abstract boolean isOwnerAdmin();
 }

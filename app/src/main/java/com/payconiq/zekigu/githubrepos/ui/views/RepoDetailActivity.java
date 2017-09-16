@@ -99,8 +99,8 @@ public class RepoDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     private void setRepoOwnereData(BaseRepo repo) {
-        detailBindingView.baseRepoDetailView.ownerView.loginTextView.setText(repo.getLogin());
-        detailBindingView.baseRepoDetailView.ownerView.typeTextView.setText(repo.getType());
+        detailBindingView.baseRepoDetailView.ownerView.loginTextView.setText(repo.getOwnerLoginName());
+        detailBindingView.baseRepoDetailView.ownerView.typeTextView.setText(repo.getOwnerType());
         detailBindingView.baseRepoDetailView.ownerView.adminTextView.setText((repo.isOwnerAdmin() ?
                 getResources().getString(R.string.yes) : getResources().getString(R.string.no) ));
         detailBindingView.baseRepoDetailView.ownerView.followersView.ownerTextView.setText(getString(R.string.activity_repo_detail_followers_title));

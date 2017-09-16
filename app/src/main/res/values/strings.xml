@@ -30,4 +30,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="close">CLOSE</string>
+
+    <string name="permission_dialog_ok_button">OK</string>
+    <string name="permission_dialog_cancel_button">Cancel</string>
+    <string name="permission_exp_write_to_external">Hi! We need write external storage grant to cache stuff.</string>
 </resources>

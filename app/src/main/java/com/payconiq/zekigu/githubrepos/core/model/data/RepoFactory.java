@@ -5,8 +5,16 @@ package com.payconiq.zekigu.githubrepos.core.model.data;
  */
 public class RepoFactory {
 
-    public static GithubRepo createGithubRepo(String pID, String pName, String pFullname, String pDesc,
-                                              boolean pPrivate, boolean pFork, String pUrl, String pHtmlUrl ){
-        return new GithubRepo(pID, pName, pFullname, pDesc, pPrivate, pFork, pUrl, pHtmlUrl);
+    public static GithubRepo createGithubRepo(String id, String name, String fullName, String desc,
+                                              boolean isPrivate, boolean fork, String url){
+        return new GithubRepo(id, name, fullName, desc, isPrivate, fork, url);
+    }
+
+    public static GithubRepo.RepoOwner createGithubRepoOwner(String loginName, String id, String avatarUrl,
+                                                             String userUrl, String followersUrl, String followingUrl,
+                                                             String starredsUrl, String subscriptionsUrl, String reposUrl,
+                                                             String type, boolean isAdmin ){
+        return new GithubRepo.RepoOwner(loginName, id, avatarUrl, userUrl, followersUrl, followingUrl,
+                starredsUrl, subscriptionsUrl,reposUrl, type, isAdmin);
     }
 }

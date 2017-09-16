@@ -3,7 +3,7 @@ package com.payconiq.zekigu.githubrepos.core.service.reporequest;
 import android.os.AsyncTask;
 
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
-import com.payconiq.zekigu.githubrepos.core.service.Request;
+import com.payconiq.zekigu.githubrepos.core.service.HttpRequestContract;
 import com.payconiq.zekigu.githubrepos.core.service.repoparser.strategy.ParseStrategy;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastConstants;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastSender;
@@ -24,7 +24,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  *  Created by zekigu on 15.09.2017.
  */
-public final class RepoRequestImpl implements Request, RepoRequestContract {
+public final class RepoRequestImpl implements HttpRequestContract, RepoRequestContract {
 
     private ParseStrategy parseStrategy;
     private ExecutorService executorService = Executors.newSingleThreadExecutor(); // grab a seperate and operation specific TPE
@@ -64,7 +64,7 @@ public final class RepoRequestImpl implements Request, RepoRequestContract {
     private String makeRepoHTTPRequest() {
         URL finalUrl = null;
         try {
-            String urlStr = String.format(HttpConstants.RETRIEVE_REPO_REQUEST_URL, 0);
+            String urlStr = HttpConstants.RETRIEVE_REPO_REQUEST_URL;
             finalUrl = new URL(urlStr);
         } catch (MalformedURLException e) {
             e.printStackTrace();
