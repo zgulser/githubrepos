@@ -65,17 +65,6 @@
                     android:gravity="center|center_horizontal" />
 
             </LinearLayout>
-
-
         </android.support.design.widget.CoordinatorLayout>
-
-        <ViewStub
-            android:id="@+id/bottomButtons"
-            android:inflatedId="@+id/bottomButtonsInflated"
-            android:layout="@layout/bottom_buttons_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
-
     </RelativeLayout>
 </layout>

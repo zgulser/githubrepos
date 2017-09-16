@@ -13,17 +13,18 @@ public abstract class BaseRepo extends SugarRecord<BaseRepo>{
     protected String desc;
     protected String url;
     protected boolean isPrivate;
+    protected boolean isForked;
 
-    public BaseRepo(){
-    }
+    public BaseRepo(){}
 
-    BaseRepo(String id, String name, String fullName, String desc, String url, boolean isPrivate){
+    BaseRepo(String id, String name, String fullName, String desc, String url, boolean isPrivate, boolean isForked){
         this.repoId = id;
         this.name = name;
         this.fullName = fullName;
         this.desc = desc;
         this.url = url;
         this.isPrivate = isPrivate;
+        this.isForked = isForked;
     }
 
     public String getRepoId() {
@@ -66,4 +67,5 @@ public abstract class BaseRepo extends SugarRecord<BaseRepo>{
     public abstract String getOwnerLoginName();
     public abstract String getOwnerType();
     public abstract boolean isOwnerAdmin();
+    public abstract boolean isForked();
 }

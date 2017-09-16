@@ -7,131 +7,165 @@ import com.orm.SugarRecord;
  */
 public class GithubRepo extends BaseRepo{
 
-    public RepoOwner owner;
-    protected boolean isForked;
+    private String ownerLoginName;
+    private String ownerId;
+    private String ownerAvatarUrl;
+    private String ownerUserUrl;
+    private String ownerFollowersUrl;
+    private String ownerFollowingUrl;
+    private String ownerStarredsUrl;
+    private String ownerSubscriptionsUrl;
+    private String ownerType;
+    private boolean isOwnerAdmin;
 
     public GithubRepo(){}
 
-    GithubRepo(String repoId, String name, String fullName, String desc, boolean isPrivate,
-               boolean isForked, String url){
-        super(repoId, name, fullName, desc, url, isPrivate);
-        this.isForked = isForked;
+    GithubRepo(RepoBuilder builder){
+        super(builder.repoId, builder.name, builder.fullName, builder.desc, builder.url, builder.isPrivate, builder.isForked);
+        this.ownerLoginName = builder.ownerLoginName;
+        this.ownerId = builder.ownerId;
+        this.ownerAvatarUrl = builder.ownerAvatarUrl;
+        this.ownerUserUrl = builder.ownerUserUrl;
+        this.ownerFollowersUrl = builder.ownerFollowersUrl;
+        this.ownerFollowingUrl = builder.ownerFollowingUrl;
+        this.ownerStarredsUrl = builder.ownerStarredsUrl;
+        this.ownerSubscriptionsUrl = builder.ownerSubscriptionsUrl;
+        this.ownerType = builder.ownerType;
+        this.isOwnerAdmin = builder.isOwnerAdmin;
     }
 
-    public void setOwner(RepoOwner owner) {
-        this.owner = owner;
-    }
-
+    @Override
     public boolean isForked() {
         return isForked;
     }
 
     @Override
-    public boolean isOwnerAdmin() {
-        if(owner != null) {
-            return this.owner.isAdmin;
-        }
-        return false;
+    public String getOwnerLoginName() {
+        return ownerLoginName;
     }
 
-    @Override
-    public String getOwnerLoginName() {
-        if(owner != null) {
-            return owner.loginName;
-        }
-        return "";
+    public String getOwnerId() {
+        return ownerId;
     }
 
     @Override
     public String getOwnerAvatarUrl() {
-        if(owner != null)
-            return owner.avatarUrl;
-
-        return "";
+        return ownerAvatarUrl;
     }
 
     @Override
     public String getOwnerType() {
-        if(owner != null)
-            return owner.type;
+        return ownerType;
+    }
 
-        return "";
+    @Override
+    public boolean isOwnerAdmin() {
+        return isOwnerAdmin;
     }
 
     public String getOwnerUrl() {
-        if(owner != null)
-            return owner.userUrl;
-
-        return "";
+        return ownerUserUrl;
     }
 
-    public String getFollowersUrl() {
-        if(owner != null) {
-            return owner.followersUrl;
-        }
-
-        return "";
+    public String getOwnerFollowersUrl() {
+        return ownerFollowersUrl;
     }
 
-    public String getFollowingUrl() {
-        if(owner != null) {
-            return owner.followingUrl;
-        }
-
-        return "";
+    public String getOwnerFollowingUrl() {
+        return ownerFollowingUrl;
     }
 
     public String getStarredsUrl() {
-        if(owner != null)
-            return owner.starredsUrl;
-
-        return "";
+        return ownerStarredsUrl;
     }
 
     public String getSubscriptionsUrl() {
-        if(owner != null)
-            return owner.subscriptionsUrl;
-
-        return "";
+        return ownerSubscriptionsUrl;
     }
 
-    public String getReposUrl() {
-        if(owner != null)
-            return owner.reposUrl;
+    public static class RepoBuilder {
 
-        return "";
-    }
+        protected String repoId;
+        protected String name;
+        protected String fullName;
+        protected String desc;
+        protected String url;
+        protected boolean isPrivate;
+        private boolean isForked;
+        private String ownerLoginName;
+        private String ownerId;
+        private String ownerAvatarUrl;
+        private String ownerUserUrl;
+        private String ownerFollowersUrl;
+        private String ownerFollowingUrl;
+        private String ownerStarredsUrl;
+        private String ownerSubscriptionsUrl;
+        private String ownerType;
+        private boolean isOwnerAdmin;
 
-    static class RepoOwner extends SugarRecord<RepoOwner> {
+        public RepoBuilder(String repoId, String name, String fullName, String desc, boolean isPrivate,
+                    boolean isForked, String url) {
+            this.repoId = repoId;
+            this.name = name;
+            this.fullName = fullName;
+            this.desc = desc;
+            this.isPrivate = isPrivate;
+            this.url = url;
+            this.isForked = isForked;
+        }
 
-        String loginName;
-        String id;
-        String avatarUrl;
-        String userUrl;
-        String followersUrl;
-        String followingUrl;
-        String starredsUrl;
-        String subscriptionsUrl;
-        String reposUrl;
-        String type;
-        boolean isAdmin;
+        public GithubRepo build(){
+            return new GithubRepo(this);
+        }
 
-        RepoOwner(){}
+        public RepoBuilder addOwnerLoginName(String ownerLoginName) {
+            this.ownerLoginName = ownerLoginName;
+            return this;
+        }
 
-        RepoOwner(String loginName, String id, String avatarUrl, String userUrl, String followersUrl,
-                  String followingUrl, String starredsUrl, String subscriptionsUrl, String reposUrl,
-                  String type, boolean isAdmin) {
-            this.loginName = loginName;
-            this.id = id;
-            this.avatarUrl = avatarUrl;
-            this.userUrl = userUrl;
-            this.followersUrl = followersUrl;
-            this.followingUrl = followingUrl;
-            this.starredsUrl = starredsUrl;
-            this.subscriptionsUrl = subscriptionsUrl;
-            this.reposUrl = reposUrl;
-            this.type = type;
-            this.isAdmin = isAdmin;
+        public RepoBuilder addOwnerId(String ownerId) {
+            this.ownerId = ownerId;
+            return this;
+        }
+
+        public RepoBuilder addOwnerAvatarUrl(String ownerAvatarUrl) {
+            this.ownerAvatarUrl = ownerAvatarUrl;
+            return this;
+        }
+
+        public RepoBuilder addOwnerUserUrl(String ownerUserUrl) {
+            this.ownerUserUrl = ownerUserUrl;
+            return this;
+        }
+
+        public RepoBuilder addOwnerFollowersUrl(String ownerFollowersUrl) {
+            this.ownerFollowersUrl = ownerFollowersUrl;
+            return this;
+        }
+
+        public RepoBuilder addOwnerFollowingUrl(String ownerFollowingUrl) {
+            this.ownerFollowingUrl = ownerFollowingUrl;
+            return this;
+        }
+
+        public RepoBuilder addOwnerStarredsUrl(String ownerStarredsUrl) {
+            this.ownerStarredsUrl = ownerStarredsUrl;
+            return this;
+        }
+
+        public RepoBuilder addOwnerSubscriptionsUrl(String ownerSubscriptionsUrl) {
+            this.ownerSubscriptionsUrl = ownerSubscriptionsUrl;
+            return this;
+        }
+
+        public RepoBuilder addUserType(String ownerType) {
+            this.ownerType = ownerType;
+            return this;
+        }
+
+        public RepoBuilder addUserAdmin(boolean isOwnerAdmin) {
+            this.isOwnerAdmin = isOwnerAdmin;
+            return this;
         }
     }
 }

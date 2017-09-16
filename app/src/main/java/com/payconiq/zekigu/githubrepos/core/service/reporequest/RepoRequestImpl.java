@@ -1,6 +1,7 @@
 package com.payconiq.zekigu.githubrepos.core.service.reporequest;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 import com.payconiq.zekigu.githubrepos.core.service.HttpRequestContract;
@@ -26,6 +27,7 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public final class RepoRequestImpl implements HttpRequestContract, RepoRequestContract {
 
+    private int page = 1;
     private ParseStrategy parseStrategy;
     private ExecutorService executorService = Executors.newSingleThreadExecutor(); // grab a seperate and operation specific TPE
 
@@ -40,7 +42,6 @@ public final class RepoRequestImpl implements HttpRequestContract, RepoRequestCo
     @Override
     public void retrieveRepos() {
         new AsyncTask<Void, Void, String>() {
-
             @Override
             protected String doInBackground(Void... params) {
                 return makeRepoHTTPRequest();
@@ -49,10 +50,8 @@ public final class RepoRequestImpl implements HttpRequestContract, RepoRequestCo
             @Override
             protected void onPostExecute(String content) {
                 super.onPostExecute(content);
-                ApplicationManager.getInstance().getRepoContainer().getRepos().clear();
                 parseStrategy.parse(content);
             }
-
         }.executeOnExecutor(executorService);
     }
 
@@ -64,13 +63,13 @@ public final class RepoRequestImpl implements HttpRequestContract, RepoRequestCo
     private String makeRepoHTTPRequest() {
         URL finalUrl = null;
         try {
-            String urlStr = HttpConstants.RETRIEVE_REPO_REQUEST_URL;
+            Log.i("Test", "repo page count: " + page);
+            String urlStr = String.format(HttpConstants.RETRIEVE_REPO_REQUEST_URL, page++, HttpConstants.REPO_ITEM_PER_PAGE);
             finalUrl = new URL(urlStr);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
-        /* init http conn */
         HttpsURLConnection conn = null;
         try {
             conn = (HttpsURLConnection) finalUrl.openConnection();

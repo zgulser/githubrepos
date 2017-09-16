@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.payconiq.zekigu.githubrepos.R;
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
+import com.payconiq.zekigu.githubrepos.core.imageloader.ImageLoad;
 import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
 import com.payconiq.zekigu.githubrepos.core.model.data.GithubRepo;
 import com.payconiq.zekigu.githubrepos.ui.views.BaseActivity;
@@ -107,19 +108,21 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoIt
         });
     }
 
-    private void setViewValues(int pPosition, RepoItemViewHolder pHolder) {
-        BaseRepo repo = repoList.get(pPosition);
-        GithubRepo githubRepo = (GithubRepo)repo;
-        pHolder.name.setText(repo.getName());
-        pHolder.privacyStatusName.setText(repo.isPrivate() ? activityContext.getString(R.string.private_string)
+    private void setViewValues(int position, RepoItemViewHolder holder) {
+        BaseRepo repo = repoList.get(position);
+        holder.name.setText(repo.getName());
+        holder.privacyStatusName.setText(repo.isPrivate() ? activityContext.getString(R.string.private_string)
                 : activityContext.getString(R.string.public_string));
-        pHolder.ownerName.setText(githubRepo.getOwnerLoginName());
+        holder.ownerName.setText(repo.getOwnerLoginName());
 
         ApplicationManager.getInstance().getImageLoader().loadImageByUrl(
-                Uri.parse(githubRepo.getOwnerAvatarUrl()),
-                pHolder.thumbnail,60, 60, false);
+                new ImageLoad.ImageLoadBuilder(
+                        Uri.parse(repo.getOwnerAvatarUrl()), holder.thumbnail)
+                        .width(60)
+                        .height(60)
+                        .hasPlaceHolder(true).build());
 
-        pHolder.forkIcon.setVisibility(githubRepo.isForked() ? View.VISIBLE : View.GONE);
+        holder.forkIcon.setVisibility(repo.isForked() ? View.VISIBLE : View.GONE);
     }
 
     /**

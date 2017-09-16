@@ -3,7 +3,7 @@ package com.payconiq.zekigu.githubrepos.core.service.repoparser.strategy;
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
 import com.payconiq.zekigu.githubrepos.core.model.data.GithubRepo;
-import com.payconiq.zekigu.githubrepos.core.model.data.RepoFactory;
+import com.payconiq.zekigu.githubrepos.core.model.data.NullGithubRepo;
 import com.payconiq.zekigu.githubrepos.core.service.repoparser.ParserConstants;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastConstants;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastSender;
@@ -49,13 +49,13 @@ public class JSONParser implements ParseStrategy {
         }
     }
 
-    private void extractRepo(final JSONObject pRepoJSONObject) {
+    private void extractRepo(final JSONObject repoJSON) {
         Observable<BaseRepo> fetchRepo =
                 Observable.create(new Observable.OnSubscribe<BaseRepo>() {
                     @Override
                     public void call(Subscriber<? super BaseRepo> subscriber) {
                         try {
-                            BaseRepo repo = createGithubRepo(pRepoJSONObject);
+                            BaseRepo repo = createGithubRepo(repoJSON);
                             subscriber.onNext(repo); // Emit repo is ready
                             subscriber.onCompleted();
                         }catch(Exception e){
@@ -65,35 +65,31 @@ public class JSONParser implements ParseStrategy {
                 });
 
         fetchRepo
-                .subscribeOn(Schedulers.newThread()) // Create a new Thread
-                .observeOn(AndroidSchedulers.mainThread()) // Use the UI thread
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseRepo>() {
                     @Override
                     public void call(BaseRepo repo) {
-                        if(repo != null) {
-                            ApplicationManager.getInstance().getRepoContainer().addRepo(repo);
-                        }
+                        ApplicationManager.getInstance().getRepoContainer().addRepoAndPersist(repo);
                     }
                 });
     }
 
-    private BaseRepo createGithubRepo(final JSONObject repo) {
+    private BaseRepo createGithubRepo(final JSONObject repoJSON) {
         try{
-            String id = repo.getString(ParserConstants.ID_FIELD);
-            String name = repo.getString(ParserConstants.NAME_FIELD);
-            String fullname = repo.getString(ParserConstants.FULLNAME_FIELD);
-            String description = repo.getString(ParserConstants.DESCRIPTION_FIELD);
-            boolean privateRepo = repo.getBoolean(ParserConstants.PRIVATE_FIELD);
-            boolean fork = repo.getBoolean(ParserConstants.FORK_FIELD);
-            String url = repo.getString(ParserConstants.URL_FIELD);
+            String id = repoJSON.getString(ParserConstants.ID_FIELD);
+            String name = repoJSON.getString(ParserConstants.NAME_FIELD);
+            String fullname = repoJSON.getString(ParserConstants.FULLNAME_FIELD);
+            String description = repoJSON.getString(ParserConstants.DESCRIPTION_FIELD);
+            boolean privateRepo = repoJSON.getBoolean(ParserConstants.PRIVATE_FIELD);
+            boolean fork = repoJSON.getBoolean(ParserConstants.FORK_FIELD);
+            String url = repoJSON.getString(ParserConstants.URL_FIELD);
 
-            GithubRepo githubRepo = RepoFactory.createGithubRepo(id, name, fullname, description,
+            GithubRepo.RepoBuilder builder = new GithubRepo.RepoBuilder(id, name, fullname, description,
                     privateRepo, fork, url);
 
-            JSONObject owner = repo.getJSONObject(ParserConstants.OWNER_OBJECT_FIELD);
-            addOwner(githubRepo, owner);
-
-            return githubRepo;
+            JSONObject owner = repoJSON.getJSONObject(ParserConstants.OWNER_OBJECT_FIELD);
+            return injectRepoOwner(builder, owner);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -101,16 +97,22 @@ public class JSONParser implements ParseStrategy {
         return null;
     }
 
-    private void addOwner(final GithubRepo repo, final JSONObject owner) {
+    private BaseRepo injectRepoOwner(final GithubRepo.RepoBuilder builder, final JSONObject owner) {
         try {
-            repo.setOwner(RepoFactory.createGithubRepoOwner(owner.getString(ParserConstants.OWNER_LOGIN_FIELD),
-                    owner.getString(ParserConstants.OWNER_ID_FIELD), owner.getString(ParserConstants.OWNER_AVATARURL_FIELD),
-                    owner.getString(ParserConstants.OWNER_USER_URL_FIELD), owner.getString(ParserConstants.OWNER_FOLLOWERSURL_FIELD),
-                    owner.getString(ParserConstants.OWNER_FOLLOWINGSURL_FIELD), owner.getString(ParserConstants.OWNER_STARREDURL_FIELD),
-                    owner.getString(ParserConstants.OWNER_SUBSURL_FIELD), owner.getString(ParserConstants.OWNER_REPOSURL_FIELD),
-                    owner.getString(ParserConstants.OWNER_TYPE_FIELD), owner.getBoolean(ParserConstants.OWNER_ADMIN_FIELD)));
+            return builder.addOwnerLoginName(owner.getString(ParserConstants.OWNER_LOGIN_FIELD))
+                    .addOwnerId(owner.getString(ParserConstants.OWNER_ID_FIELD))
+                    .addOwnerAvatarUrl(owner.getString(ParserConstants.OWNER_AVATARURL_FIELD))
+                    .addOwnerUserUrl(owner.getString(ParserConstants.OWNER_USER_URL_FIELD))
+                    .addOwnerFollowersUrl(owner.getString(ParserConstants.OWNER_FOLLOWERSURL_FIELD))
+                    .addOwnerFollowingUrl(owner.getString(ParserConstants.OWNER_FOLLOWINGSURL_FIELD))
+                    .addOwnerStarredsUrl(owner.getString(ParserConstants.OWNER_STARREDURL_FIELD))
+                    .addOwnerSubscriptionsUrl(owner.getString(ParserConstants.OWNER_SUBSURL_FIELD))
+                    .addUserType(owner.getString(ParserConstants.OWNER_TYPE_FIELD))
+                    .addUserAdmin(owner.getBoolean(ParserConstants.OWNER_ADMIN_FIELD)).build();
         } catch (JSONException je){
             je.printStackTrace();
         }
+
+        return new NullGithubRepo();
     }
 }

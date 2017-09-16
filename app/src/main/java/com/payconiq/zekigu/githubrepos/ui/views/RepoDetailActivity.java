@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
+import com.payconiq.zekigu.githubrepos.core.imageloader.ImageLoad;
 import com.payconiq.zekigu.githubrepos.core.model.container.RepoContainer;
 import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
 import com.payconiq.zekigu.githubrepos.databinding.ActivityRepoDetailBinding;
@@ -78,18 +79,24 @@ public class RepoDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     private void setRepoData(BaseRepo repo) {
-        getSupportActionBar().setTitle(ApplicationManager.getInstance().getRepoContainer().
-                                       getRepoReporter().getRepoVisibleName(repo));
-
+        setActionBarTitle(repo);
         setRepoOwnerAvatar(repo);
         setRepoInformativeData(repo);
         setRepoOwnereData(repo);
     }
 
+    private void setActionBarTitle(BaseRepo repo){
+        getSupportActionBar().setTitle(ApplicationManager.getInstance().getRepoContainer().
+                getRepoReporter().getRepoVisibleName(repo));
+    }
+
     private void setRepoOwnerAvatar(BaseRepo repo){
         ApplicationManager.getInstance().getImageLoader().loadImageByUrl(
-                Uri.parse(repo.getOwnerAvatarUrl()),
-                detailBindingView.repoAvatarImageView, 200, 200, true);
+                new ImageLoad.ImageLoadBuilder(
+                        Uri.parse(repo.getOwnerAvatarUrl()), detailBindingView.repoAvatarImageView)
+                            .width(200)
+                            .height(200)
+                            .hasPlaceHolder(true).build());
     }
 
     private void setRepoInformativeData(BaseRepo repo) {

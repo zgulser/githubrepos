@@ -28,8 +28,7 @@
                 android:layout_margin="@dimen/text_margin"
                 android:layout_gravity="bottom"
                 android:ellipsize="end"
-                style="@style/valueTextViewStyle"
-                android:text="Syd" />
+                style="@style/valueTextViewStyle" />
         </LinearLayout>
 
         <LinearLayout

@@ -16,20 +16,19 @@ public final class ImageLoaderImpl implements ImageLoaderContract {
     public ImageLoaderImpl(){}
 
     @Override
-    public void loadImageByUrl(Uri uri, ImageView imageView, int width, int height, boolean hasPlaceHolder) {
+    public void loadImageByUrl(ImageLoad imageLoad) {
         Glide.with(ApplicationManager.getInstance().getContext())
-                .load(uri)
-                .override(width, height)
+                .load(imageLoad.getUri())
+                .override(imageLoad.getWidth(), imageLoad.getHeight())
                 .centerCrop().fitCenter().crossFade()
                 .skipMemoryCache(false)
-                .placeholder(hasPlaceHolder ? R.drawable.repo_default_avatar : R.color.colorPrimaryDark)
+                .placeholder(imageLoad.hasPlaceHolder() ? R.drawable.repo_default_avatar : R.color.colorPrimaryDark)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageView);
+                .into(imageLoad.getImageView());
     }
 
     @Override
-    public void loadImageByFileName(String fileName, ImageView imageView,
-                                    int width, int height, boolean hasPlaceHolder) {
+    public void loadImageByFileName(ImageLoad imageLoad) {
         // TODO: Implement image loading by the filename
     }
 }

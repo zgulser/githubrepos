@@ -1,20 +1,19 @@
 package com.payconiq.zekigu.githubrepos.ui.views;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,9 +23,6 @@ import android.view.WindowManager;
 
 import com.payconiq.zekigu.githubrepos.R;
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
-import com.payconiq.zekigu.githubrepos.core.permissions.GetWriteExternalStorageGrant;
-import com.payconiq.zekigu.githubrepos.core.permissions.Grant;
-import com.payconiq.zekigu.githubrepos.core.permissions.PermissionBroker;
 import com.payconiq.zekigu.githubrepos.core.permissions.PermissionUtils;
 import com.payconiq.zekigu.githubrepos.core.utils.CoreUtils;
 import com.payconiq.zekigu.githubrepos.core.utils.HttpConstants;
@@ -60,6 +56,7 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
         setupActionBar();
         setupSwipeRefreshLayout();
         setupRecyclerViewAndAdapter();
+        setupScrollListener();
         tuneVisibilities();
         retrieveRepos();
     }
@@ -81,13 +78,7 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
     }
 
     private void setupSwipeRefreshLayout(){
-        listViewBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                retrieveRepos();
-                listViewBinding.swipeToRefresh.setRefreshing(false);
-            }
-        });
+        listViewBinding.swipeToRefresh.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE);
     }
 
     @Override
@@ -116,10 +107,10 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
 
     private void retrieveRepos() {
         if(CoreUtils.isConnectedToInternet()) {
-            ApplicationManager.getInstance().getRequestHandler().request(
-                    HttpConstants.HttpRequestTypes.RETRIEVE_REPOS);
+            ApplicationManager.getInstance().getRequestHandler().request(HttpConstants.HttpRequestTypes.RETRIEVE_REPOS);
         } else {
             promptMessageViaSnackBar(UIConstants.WarningType.NO_INTERNET_CONNECTION);
+            ApplicationManager.getInstance().getRepoContainer().getPersistencyManager().loadRepositories();
         }
     }
 
@@ -138,6 +129,37 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
                 RepoListActivity.this
         );
         listViewBinding.reposRecyclerView.setAdapter(recyclerViewAdapter);
+    }
+
+    private void setupScrollListener(){
+        listViewBinding.reposRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int totalItemCount = recyclerView.getAdapter().getItemCount();
+                int lastVisibleItemIndex = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                int lastVisibleItemIndex2 = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                Log.i("Test", "visible index: " + lastVisibleItemIndex);
+                Log.i("Test", "visible index 2: " + lastVisibleItemIndex2);
+                Log.i("Test", "visible index scrolling state: " + newState);
+                if(pagify(totalItemCount-1, lastVisibleItemIndex, newState)){
+                    retrieveRepos();
+                }
+            }
+        });
+    }
+
+    private boolean pagify(int totalItemCount, int lastVisibleIndex, int scrollingState){
+        switch (scrollingState){
+            case RecyclerView.SCROLL_STATE_DRAGGING:
+                return (totalItemCount-2) == lastVisibleIndex;
+            case RecyclerView.SCROLL_STATE_SETTLING:
+                return false;
+            case RecyclerView.SCROLL_STATE_IDLE:
+                return totalItemCount == lastVisibleIndex;
+        }
+
+        return false;
     }
 
     @Override
@@ -216,35 +238,5 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
     @Override
     public void onNoInternetConnection() {
         promptMessageViaSnackBar(UIConstants.WarningType.NO_INTERNET_CONNECTION);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case PermissionUtils.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
-                if (ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED) {
-
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     *
-     * Desc: Sample method to show how you can use permission module
-     *
-     * @param context
-     */
-    private void handleWriteExternalStoragePermission(final Activity context) {
-        Grant grant = new Grant(Manifest.permission.WRITE_EXTERNAL_STORAGE, context.getResources().getString(R.string.permission_exp_write_to_external));
-        GetWriteExternalStorageGrant callGrant = new GetWriteExternalStorageGrant(grant, context);
-
-        PermissionBroker broker = new PermissionBroker();
-        broker.takePermission(callGrant);
-        broker.executePermissions();
     }
 }

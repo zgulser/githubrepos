@@ -32,7 +32,7 @@
     </style>
 
     <style name="titleEmptyViewTextViewStyle">
-        <item name="android:layout_height">40dip</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textSize">18sp</item>
@@ -40,7 +40,7 @@
     </style>
 
     <style name="valueTextViewStyle">
-        <item name="android:layout_height">40dip</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:textSize">16sp</item>
@@ -49,7 +49,7 @@
     </style>
 
     <style name="headerTextViewStyle">
-        <item name="android:layout_height">40dip</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:textSize">16sp</item>

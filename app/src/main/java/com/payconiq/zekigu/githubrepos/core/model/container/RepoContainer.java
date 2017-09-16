@@ -33,13 +33,12 @@ public class RepoContainer implements RepoNotifierContract {
 
     public synchronized void addRepo(BaseRepo repo) {
         repositories.add(repo);
-        persistencyManager.saveRepo(repo);
         repoAdded();
     }
 
-    public synchronized void removeRepo(BaseRepo repo) {
-        repositories.remove(repo);
-        repoRemoved();
+    public synchronized void addRepoAndPersist(BaseRepo repo) {
+        addRepo(repo);
+        persistencyManager.saveRepo(repo);
     }
 
     @Override
