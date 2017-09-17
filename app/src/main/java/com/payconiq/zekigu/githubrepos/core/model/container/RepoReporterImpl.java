@@ -8,8 +8,6 @@ import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
  */
 public class RepoReporterImpl implements RepoReporterContract {
 
-    public RepoReporterImpl(){}
-
     @Override
     public String getRepoVisibleName(BaseRepo baseRepo) {
         return baseRepo.getName();

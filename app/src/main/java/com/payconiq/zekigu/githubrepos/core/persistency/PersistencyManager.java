@@ -25,7 +25,6 @@ public class PersistencyManager {
     public void saveRepo(BaseRepo repo){
         GithubRepo grepo = (GithubRepo) repo;
         grepo.save();
-        //loadRepositories();
     }
 
     public void loadRepositories(){

@@ -6,10 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <meta-data android:name="DATABASE" android:value="githubrepos.db" />
-    <meta-data android:name="VERSION" android:value="1" />
+    <meta-data android:name="DATABASE" android:value="${dbName}" />
+    <meta-data android:name="VERSION" android:value="${version}" />
     <meta-data android:name="QUERY_LOG" android:value="true" />
-    <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.payconiq.zekigu.githubrepos.core.model.data" />
+    <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="${packageName}" />
 
     <application
         android:name="com.payconiq.zekigu.githubrepos.core.app.GithubRepoApplication"
