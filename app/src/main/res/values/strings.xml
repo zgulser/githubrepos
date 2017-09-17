@@ -34,4 +34,7 @@
     <string name="permission_dialog_ok_button">OK</string>
     <string name="permission_dialog_cancel_button">Cancel</string>
     <string name="permission_exp_write_to_external">Hi! We need write external storage grant to cache stuff.</string>
+
+    <dimen name="search_button_x_coor">996px</dimen>
+    <dimen name="search_button_y_coor">176px</dimen>
 </resources>

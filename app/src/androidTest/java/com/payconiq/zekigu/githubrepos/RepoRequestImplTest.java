@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import static junit.framework.Assert.assertTrue;
 
 /**
- * Created by Backbase R&D B.V on 17/09/2017.
+ * Created by zekigu on 16.09.2017
  */
 
 @RunWith(AndroidJUnit4.class)

@@ -138,10 +138,6 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
                 super.onScrollStateChanged(recyclerView, newState);
                 int totalItemCount = recyclerView.getAdapter().getItemCount();
                 int lastVisibleItemIndex = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                int lastVisibleItemIndex2 = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                Log.i("Test", "visible index: " + lastVisibleItemIndex);
-                Log.i("Test", "visible index 2: " + lastVisibleItemIndex2);
-                Log.i("Test", "visible index scrolling state: " + newState);
                 if(pagify(totalItemCount-1, lastVisibleItemIndex, newState)){
                     retrieveRepos();
                 }
@@ -167,8 +163,8 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_repos_list, menu);
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new CustomQueryTextListener() {
             @Override
