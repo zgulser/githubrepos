@@ -5,5 +5,4 @@ package com.payconiq.zekigu.githubrepos.core.service.reporequest;
  */
 public interface RepoRequestContract {
     void retrieveRepos();
-    void retrieveImages();
 }

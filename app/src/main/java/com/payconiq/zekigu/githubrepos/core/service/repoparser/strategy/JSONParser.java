@@ -1,5 +1,7 @@
 package com.payconiq.zekigu.githubrepos.core.service.repoparser.strategy;
 
+import android.support.annotation.VisibleForTesting;
+
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
 import com.payconiq.zekigu.githubrepos.core.model.data.GithubRepo;
@@ -75,7 +77,8 @@ public class JSONParser implements ParseStrategy {
                 });
     }
 
-    private BaseRepo createGithubRepo(final JSONObject repoJSON) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public BaseRepo createGithubRepo(final JSONObject repoJSON){
         try{
             String id = repoJSON.getString(ParserConstants.ID_FIELD);
             String name = repoJSON.getString(ParserConstants.NAME_FIELD);
@@ -90,29 +93,28 @@ public class JSONParser implements ParseStrategy {
 
             JSONObject owner = repoJSON.getJSONObject(ParserConstants.OWNER_OBJECT_FIELD);
             return injectRepoOwner(builder, owner);
-        }catch(Exception e){
+        }catch(JSONException e){
             e.printStackTrace();
         }
 
         return null;
     }
 
-    private BaseRepo injectRepoOwner(final GithubRepo.RepoBuilder builder, final JSONObject owner) {
-        try {
-            return builder.addOwnerLoginName(owner.getString(ParserConstants.OWNER_LOGIN_FIELD))
-                    .addOwnerId(owner.getString(ParserConstants.OWNER_ID_FIELD))
-                    .addOwnerAvatarUrl(owner.getString(ParserConstants.OWNER_AVATARURL_FIELD))
-                    .addOwnerUserUrl(owner.getString(ParserConstants.OWNER_USER_URL_FIELD))
-                    .addOwnerFollowersUrl(owner.getString(ParserConstants.OWNER_FOLLOWERSURL_FIELD))
-                    .addOwnerFollowingUrl(owner.getString(ParserConstants.OWNER_FOLLOWINGSURL_FIELD))
-                    .addOwnerStarredsUrl(owner.getString(ParserConstants.OWNER_STARREDURL_FIELD))
-                    .addOwnerSubscriptionsUrl(owner.getString(ParserConstants.OWNER_SUBSURL_FIELD))
-                    .addUserType(owner.getString(ParserConstants.OWNER_TYPE_FIELD))
-                    .addUserAdmin(owner.getBoolean(ParserConstants.OWNER_ADMIN_FIELD)).build();
-        } catch (JSONException je){
-            je.printStackTrace();
-        }
-
-        return new NullGithubRepo();
+    private BaseRepo injectRepoOwner(final GithubRepo.RepoBuilder builder, final JSONObject owner) throws JSONException {
+        return builder.addOwnerLoginName(owner.getString(ParserConstants.OWNER_LOGIN_FIELD))
+                .addOwnerId(owner.getString(ParserConstants.OWNER_ID_FIELD))
+                .addOwnerAvatarUrl(owner.getString(ParserConstants.OWNER_AVATARURL_FIELD))
+                .addOwnerUserUrl(owner.getString(ParserConstants.OWNER_USER_URL_FIELD))
+                .addOwnerFollowersUrl(owner.getString(ParserConstants.OWNER_FOLLOWERSURL_FIELD))
+                .addOwnerFollowingUrl(owner.getString(ParserConstants.OWNER_FOLLOWINGSURL_FIELD))
+                .addOwnerStarredsUrl(owner.getString(ParserConstants.OWNER_STARREDURL_FIELD))
+                .addOwnerSubscriptionsUrl(owner.getString(ParserConstants.OWNER_SUBSURL_FIELD))
+                .addUserType(owner.getString(ParserConstants.OWNER_TYPE_FIELD))
+                .addUserAdmin(owner.getBoolean(ParserConstants.OWNER_ADMIN_FIELD)).build();
     }
+
+    public JSONArray getRepoArray() {
+        return repoArray;
+    }
+
 }

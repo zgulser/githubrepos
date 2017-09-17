@@ -1,5 +1,7 @@
 package com.payconiq.zekigu.githubrepos.core.service;
 
+import android.support.annotation.VisibleForTesting;
+
 import com.payconiq.zekigu.githubrepos.core.service.reporequest.RepoRequestContract;
 import com.payconiq.zekigu.githubrepos.core.utils.HttpConstants;
 
@@ -10,17 +12,22 @@ public class HttpRequestService implements HttpRequestContract {
 
     private RepoRequestContract repoRequestService;
 
-    public HttpRequestService(){
-    }
+    public HttpRequestService(){}
 
-    public void addRepoRequesContract(RepoRequestContract pRepoRequestHandler){
-        repoRequestService = pRepoRequestHandler;
+    public void addRepoRequesContract(RepoRequestContract repoRequestService){
+        this.repoRequestService = repoRequestService;
     }
 
     @Override
-    public void request(HttpConstants.HttpRequestTypes pType) {
-        if(pType == HttpConstants.HttpRequestTypes.RETRIEVE_REPOS){
+    public void request(HttpConstants.HttpRequestTypes type) {
+        if(type == HttpConstants.HttpRequestTypes.RETRIEVE_REPOS){
             repoRequestService.retrieveRepos();
         }
+    }
+
+    @Override
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public RepoRequestContract getRepoRequestContract() {
+        return repoRequestService;
     }
 }

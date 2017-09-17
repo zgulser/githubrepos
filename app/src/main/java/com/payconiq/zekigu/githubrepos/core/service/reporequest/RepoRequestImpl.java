@@ -1,6 +1,9 @@
 package com.payconiq.zekigu.githubrepos.core.service.reporequest;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.util.Log;
 
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
@@ -25,14 +28,17 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  *  Created by zekigu on 15.09.2017.
  */
-public final class RepoRequestImpl implements HttpRequestContract, RepoRequestContract {
+public final class RepoRequestImpl implements RepoRequestContract {
 
     private int page = 1;
     private ParseStrategy parseStrategy;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor(); // grab a seperate and operation specific TPE
+    private ExecutorService executorService;
+    private CountingIdlingResource countingIdlingResource;
 
     public RepoRequestImpl(){
-        checkAndResetExecutor();
+        this.executorService = Executors.newSingleThreadExecutor();
+        this.countingIdlingResource = new CountingIdlingResource("RepoRequestImplSrc");
+        activateExecutor();
     }
 
     public void addRepoResponseParser(ParseStrategy parseStrategy){
@@ -41,6 +47,7 @@ public final class RepoRequestImpl implements HttpRequestContract, RepoRequestCo
 
     @Override
     public void retrieveRepos() {
+        countingIdlingResource.increment();
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -50,20 +57,21 @@ public final class RepoRequestImpl implements HttpRequestContract, RepoRequestCo
             @Override
             protected void onPostExecute(String content) {
                 super.onPostExecute(content);
+                countingIdlingResource.decrement();
                 parseStrategy.parse(content);
             }
-        }.executeOnExecutor(executorService);
-    }
 
-    @Override
-    public void retrieveImages() {
-        // TODO: Call ImageLoaderImpl module to retrieve images
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                countingIdlingResource.decrement();
+            }
+        }.executeOnExecutor(executorService);
     }
 
     private String makeRepoHTTPRequest() {
         URL finalUrl = null;
         try {
-            Log.i("Test", "repo page count: " + page);
             String urlStr = String.format(HttpConstants.RETRIEVE_REPO_REQUEST_URL, page++, HttpConstants.REPO_ITEM_PER_PAGE);
             finalUrl = new URL(urlStr);
         } catch (MalformedURLException e) {
@@ -132,7 +140,8 @@ public final class RepoRequestImpl implements HttpRequestContract, RepoRequestCo
     /**
      * Desc: Method to start over or init thread pool executor
      */
-    private void checkAndResetExecutor(){
+    @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
+    public void activateExecutor(){
         if(executorService == null){
             executorService = Executors.newSingleThreadExecutor();
         } else{
@@ -142,12 +151,19 @@ public final class RepoRequestImpl implements HttpRequestContract, RepoRequestCo
         }
     }
 
-    @Override
-    public void request(HttpConstants.HttpRequestTypes type) {
-        if(type == HttpConstants.HttpRequestTypes.RETRIEVE_REPOS){
-            retrieveRepos();
-        } else if(type == HttpConstants.HttpRequestTypes.DOWNLOAD_IMAGES){
-            retrieveImages();
-        }
+    @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
+    public ParseStrategy getParseStrategy() {
+        return parseStrategy;
     }
+
+    @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
+    public CountingIdlingResource getCountingIdlingResource() {
+        return countingIdlingResource;
+    }
+
 }

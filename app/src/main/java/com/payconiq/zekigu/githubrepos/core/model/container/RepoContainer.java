@@ -1,6 +1,7 @@
 package com.payconiq.zekigu.githubrepos.core.model.container;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
@@ -22,8 +23,10 @@ public class RepoContainer implements RepoNotifierContract {
     private RepoReporterContract repoReporter;
     private PersistencyManager persistencyManager;
 
-    public RepoContainer(Context context) {
+    public RepoContainer(@NonNull Context context) {
+        if (context == null) throw new NullPointerException();
         this.repositories = new ArrayList<>();
+        this.searchedRepositories = new ArrayList<>();
         this.persistencyManager = new PersistencyManager(context);
     }
 

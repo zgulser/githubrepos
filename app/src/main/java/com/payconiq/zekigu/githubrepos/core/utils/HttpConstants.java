@@ -7,5 +7,5 @@ public class HttpConstants {
     public static String RETRIEVE_REPO_REQUEST_URL = "https://api.github.com/users/JakeWharton/repos?page=%d&per_page=%d";
     public static final int REPO_ITEM_PER_PAGE = 15;
     public static final int HTTP_REQUEST_TIMEOUT = 30 * 1000; // in seconds
-    public enum HttpRequestTypes  { RETRIEVE_REPOS, DOWNLOAD_IMAGES }
+    public enum HttpRequestTypes  { RETRIEVE_REPOS }
 }
