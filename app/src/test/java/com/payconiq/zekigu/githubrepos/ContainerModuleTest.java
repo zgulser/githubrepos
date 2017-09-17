@@ -28,7 +28,7 @@ public class ContainerModuleTest {
 
     @Before
     public void setup(){
-        repoContainer = new RepoContainer(mockContext);
+        repoContainer = new RepoContainer();
     }
 
     @Test

@@ -23,11 +23,10 @@ public class RepoContainer implements RepoNotifierContract {
     private RepoReporterContract repoReporter;
     private PersistencyManager persistencyManager;
 
-    public RepoContainer(@NonNull Context context) {
-        if (context == null) throw new NullPointerException();
+    public RepoContainer() {
         this.repositories = new ArrayList<>();
         this.searchedRepositories = new ArrayList<>();
-        this.persistencyManager = new PersistencyManager(context);
+        this.persistencyManager = new PersistencyManager();
     }
 
     public void addRepoReporter(RepoReporterContract repoReporter) {
@@ -46,20 +45,17 @@ public class RepoContainer implements RepoNotifierContract {
 
     @Override
     public void repoAdded() {
-        BroadcastSender.sendBroadcast(ApplicationManager.getInstance().getContext(),
-                BroadcastConstants.REPO_ADDED);
+        BroadcastSender.sendBroadcast(ApplicationManager.getInstance().getContext(), BroadcastConstants.REPO_ADDED);
     }
 
     @Override
     public void repoChanged(BaseRepo pBaseRepo) {
-        BroadcastSender.sendBroadcast(ApplicationManager.getInstance().getContext(),
-                BroadcastConstants.REPO_CHANGED);
+        BroadcastSender.sendBroadcast(ApplicationManager.getInstance().getContext(), BroadcastConstants.REPO_CHANGED);
     }
 
     @Override
     public void repoRemoved() {
-        BroadcastSender.sendBroadcast(ApplicationManager.getInstance().getContext(),
-                BroadcastConstants.REPO_REMOVED);
+        BroadcastSender.sendBroadcast(ApplicationManager.getInstance().getContext(), BroadcastConstants.REPO_REMOVED);
     }
 
     public void searchRepos(String searchQuery) {

@@ -9,7 +9,10 @@ import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 /**
  * Created by zekigu on 15.09.2017.
  */
-public class CoreUtils {
+public class AppUtils {
+
+    public static final int REPO_ITEM_PER_PAGE = 15;
+
     public static boolean isConnectedToInternet() {
         ConnectivityManager cm =
                 (ConnectivityManager) ApplicationManager.getInstance().getContext().

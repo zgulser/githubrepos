@@ -2,7 +2,6 @@ package com.payconiq.zekigu.githubrepos.ui.views;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +21,7 @@ import android.view.WindowManager;
 
 import com.payconiq.zekigu.githubrepos.R;
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
-import com.payconiq.zekigu.githubrepos.core.permissions.PermissionUtils;
-import com.payconiq.zekigu.githubrepos.core.utils.CoreUtils;
+import com.payconiq.zekigu.githubrepos.core.utils.AppUtils;
 import com.payconiq.zekigu.githubrepos.core.utils.HttpConstants;
 import com.payconiq.zekigu.githubrepos.databinding.ActivityReposListBinding;
 import com.payconiq.zekigu.githubrepos.ui.eventhandler.ErrorEventBroadcastListener;
@@ -58,7 +55,10 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
         setupRecyclerViewAndAdapter();
         setupScrollListener();
         tuneVisibilities();
-        retrieveRepos();
+
+        if(!AppUtils.isConnectedToInternet()) {
+            promptMessageViaSnackBar(UIConstants.WarningType.NO_INTERNET_CONNECTION);
+        }
     }
 
     private void setupStatusBar() {
@@ -84,15 +84,16 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
     @Override
     protected void onResume() {
         super.onResume();
-        initReceiver();
         listViewBinding.appbarLayout.addOnOffsetChangedListener(this);
+        initReceiver();
+        retrieveRepos();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver();
         listViewBinding.appbarLayout.removeOnOffsetChangedListener(this);
+        unregisterReceiver();
     }
 
     private void initReceiver(){
@@ -106,10 +107,9 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
     }
 
     private void retrieveRepos() {
-        if(CoreUtils.isConnectedToInternet()) {
+        if(AppUtils.isConnectedToInternet()) {
             ApplicationManager.getInstance().getRequestHandler().request(HttpConstants.HttpRequestTypes.RETRIEVE_REPOS);
         } else {
-            promptMessageViaSnackBar(UIConstants.WarningType.NO_INTERNET_CONNECTION);
             ApplicationManager.getInstance().getRepoContainer().getPersistencyManager().loadRepositories();
         }
     }

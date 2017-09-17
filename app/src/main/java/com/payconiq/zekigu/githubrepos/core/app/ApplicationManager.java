@@ -42,7 +42,7 @@ public class ApplicationManager {
         setContext(context);
         if(!initialized) {
             addRepoRequestService();
-            addRepoContainer(context);
+            addRepoContainer();
             addImageLoader(new ImageLoaderImpl());
             initialized = true;
         }
@@ -60,8 +60,8 @@ public class ApplicationManager {
         addRequestHandler(httpReqHandler);
     }
 
-    private void addRepoContainer(Context context) {
-        repoContainer = new RepoContainer(context);
+    private void addRepoContainer() {
+        repoContainer = new RepoContainer();
         repoContainer.addRepoReporter(new RepoReporterImpl());
     }
 

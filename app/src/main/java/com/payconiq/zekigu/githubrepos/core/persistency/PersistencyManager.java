@@ -7,6 +7,7 @@ import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 import com.payconiq.zekigu.githubrepos.core.model.container.RepoContainer;
 import com.payconiq.zekigu.githubrepos.core.model.data.BaseRepo;
 import com.payconiq.zekigu.githubrepos.core.model.data.GithubRepo;
+import com.payconiq.zekigu.githubrepos.core.utils.AppUtils;
 
 import java.util.List;
 
@@ -16,11 +17,10 @@ import java.util.List;
 
 public class PersistencyManager {
 
-    private Context context;
+    private int fetchedRepoCount = 0;
+    private int fetchedRepoCoef = 1;
 
-    public PersistencyManager(Context context){
-        this.context = context;
-    }
+    public PersistencyManager(){}
 
     public void saveRepo(BaseRepo repo){
         GithubRepo grepo = (GithubRepo) repo;
@@ -29,8 +29,14 @@ public class PersistencyManager {
 
     public void loadRepositories(){
         List<GithubRepo> repositories = GithubRepo.listAll(GithubRepo.class);
-        for (GithubRepo repo : repositories){
-            ApplicationManager.getInstance().getRepoContainer().addRepo(repo);
+        if(fetchedRepoCount < repositories.size()) {
+            for (int i=fetchedRepoCount; i < AppUtils.REPO_ITEM_PER_PAGE*fetchedRepoCoef; i++) {
+                BaseRepo repo = repositories.get(i);
+                ApplicationManager.getInstance().getRepoContainer().addRepo(repo);
+                fetchedRepoCount += 1;
+            }
+
+            fetchedRepoCoef += 1;
         }
     }
 }

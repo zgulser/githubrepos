@@ -9,6 +9,7 @@ import android.util.Log;
 import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 import com.payconiq.zekigu.githubrepos.core.service.HttpRequestContract;
 import com.payconiq.zekigu.githubrepos.core.service.repoparser.strategy.ParseStrategy;
+import com.payconiq.zekigu.githubrepos.core.utils.AppUtils;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastConstants;
 import com.payconiq.zekigu.githubrepos.core.utils.BroadcastSender;
 import com.payconiq.zekigu.githubrepos.core.utils.HttpConstants;
@@ -72,7 +73,7 @@ public final class RepoRequestImpl implements RepoRequestContract {
     private String makeRepoHTTPRequest() {
         URL finalUrl = null;
         try {
-            String urlStr = String.format(HttpConstants.RETRIEVE_REPO_REQUEST_URL, page++, HttpConstants.REPO_ITEM_PER_PAGE);
+            String urlStr = String.format(HttpConstants.RETRIEVE_REPO_REQUEST_URL, page++, AppUtils.REPO_ITEM_PER_PAGE);
             finalUrl = new URL(urlStr);
         } catch (MalformedURLException e) {
             e.printStackTrace();
