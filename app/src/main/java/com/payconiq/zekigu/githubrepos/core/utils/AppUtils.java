@@ -12,6 +12,7 @@ import com.payconiq.zekigu.githubrepos.core.app.ApplicationManager;
 public class AppUtils {
 
     public static final int REPO_ITEM_PER_PAGE = 15;
+    public static int REPO_CURRENT_PAGE = 1;
 
     public static boolean isConnectedToInternet() {
         ConnectivityManager cm =

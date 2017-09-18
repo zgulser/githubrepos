@@ -18,7 +18,6 @@ import java.util.List;
 public class PersistencyManager {
 
     private int fetchedRepoCount = 0;
-    private int fetchedRepoCoef = 1;
 
     public PersistencyManager(){}
 
@@ -30,13 +29,13 @@ public class PersistencyManager {
     public void loadRepositories(){
         List<GithubRepo> repositories = GithubRepo.listAll(GithubRepo.class);
         if(fetchedRepoCount < repositories.size()) {
-            for (int i=fetchedRepoCount; i < AppUtils.REPO_ITEM_PER_PAGE*fetchedRepoCoef; i++) {
+            for (int i=fetchedRepoCount; i < AppUtils.REPO_ITEM_PER_PAGE*AppUtils.REPO_CURRENT_PAGE; i++) {
                 BaseRepo repo = repositories.get(i);
                 ApplicationManager.getInstance().getRepoContainer().addRepo(repo);
                 fetchedRepoCount += 1;
             }
 
-            fetchedRepoCoef += 1;
+            AppUtils.REPO_CURRENT_PAGE += 1;
         }
     }
 }

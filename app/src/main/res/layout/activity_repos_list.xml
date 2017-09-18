@@ -9,7 +9,7 @@
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="false">
+            android:fitsSystemWindows="true">
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/appbarLayout"
@@ -22,30 +22,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
-                    android:nestedScrollingEnabled="true"
                     app:layout_scrollFlags="scroll|enterAlways" />
 
             </android.support.design.widget.AppBarLayout>
 
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swipeToRefresh"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/reposRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/reposRecyclerView"
-                    android:scrollbars="vertical"
-                    android:background="@android:color/white"
-                    android:divider="@android:color/darker_gray"
-                    android:dividerHeight="1dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </android.support.v4.widget.SwipeRefreshLayout>
+                android:layout_marginTop="?android:attr/actionBarSize"
+                android:scrollbars="vertical"
+                android:background="@android:color/white"
+                android:divider="@android:color/darker_gray"
+                android:dividerHeight="1dp" />
 
             <LinearLayout
                 android:id="@+id/emptyViewLayout"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="?android:attr/actionBarSize"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center"

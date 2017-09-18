@@ -1,5 +1,7 @@
 <resources>
+
     <string name="app_name">GithubRepos</string>
+    <string name="app_label">Payconiq</string>
     <string name="action_settings">Settings</string>
     <string name="activity_repo_detail_title">Repo Detail</string>
     <string name="activity_repos_title">JW\'s Repos</string>

@@ -1,0 +1,7 @@
+<resources>
+    <integer name="thumbnail_width_in_px">60</integer>
+    <integer name="thumbnail_height_in_px">60</integer>
+
+    <integer name="image_width_in_px">200</integer>
+    <integer name="image_height_in_px">200</integer>
+</resources>

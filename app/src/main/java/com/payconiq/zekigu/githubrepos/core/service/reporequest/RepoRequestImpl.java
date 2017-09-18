@@ -31,7 +31,6 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public final class RepoRequestImpl implements RepoRequestContract {
 
-    private int page = 1;
     private ParseStrategy parseStrategy;
     private ExecutorService executorService;
     private CountingIdlingResource countingIdlingResource;
@@ -73,7 +72,7 @@ public final class RepoRequestImpl implements RepoRequestContract {
     private String makeRepoHTTPRequest() {
         URL finalUrl = null;
         try {
-            String urlStr = String.format(HttpConstants.RETRIEVE_REPO_REQUEST_URL, page++, AppUtils.REPO_ITEM_PER_PAGE);
+            String urlStr = String.format(HttpConstants.RETRIEVE_REPO_REQUEST_URL, AppUtils.REPO_CURRENT_PAGE++, AppUtils.REPO_ITEM_PER_PAGE);
             finalUrl = new URL(urlStr);
         } catch (MalformedURLException e) {
             e.printStackTrace();

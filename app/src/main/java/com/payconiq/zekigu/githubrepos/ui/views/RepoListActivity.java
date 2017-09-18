@@ -33,7 +33,10 @@ import com.payconiq.zekigu.githubrepos.ui.utils.UIConstants;
 /**
  *  Created by zekigu on 15.09.2017
  */
-public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
+public class RepoListActivity extends BaseActivity {
+
+    private final int INDEXIFY_NUMBER = 1;
+    private final int PAGINATION_UPPER_LIMIT_COEF = 2;
 
     private RepoListAdapter recyclerViewAdapter;
     private ActivityReposListBinding listViewBinding;
@@ -51,7 +54,6 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
 
         setupStatusBar();
         setupActionBar();
-        setupSwipeRefreshLayout();
         setupRecyclerViewAndAdapter();
         setupScrollListener();
         tuneVisibilities();
@@ -77,14 +79,9 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
         getSupportActionBar().setTitle(R.string.activity_repos_title);
     }
 
-    private void setupSwipeRefreshLayout(){
-        listViewBinding.swipeToRefresh.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        listViewBinding.appbarLayout.addOnOffsetChangedListener(this);
         initReceiver();
         retrieveRepos();
     }
@@ -92,7 +89,6 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
     @Override
     protected void onPause() {
         super.onPause();
-        listViewBinding.appbarLayout.removeOnOffsetChangedListener(this);
         unregisterReceiver();
     }
 
@@ -138,7 +134,7 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
                 super.onScrollStateChanged(recyclerView, newState);
                 int totalItemCount = recyclerView.getAdapter().getItemCount();
                 int lastVisibleItemIndex = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                if(pagify(totalItemCount-1, lastVisibleItemIndex, newState)){
+                if(pagify(totalItemCount-INDEXIFY_NUMBER, lastVisibleItemIndex, newState)){
                     retrieveRepos();
                 }
             }
@@ -148,7 +144,7 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
     private boolean pagify(int totalItemCount, int lastVisibleIndex, int scrollingState){
         switch (scrollingState){
             case RecyclerView.SCROLL_STATE_DRAGGING:
-                return (totalItemCount-2) == lastVisibleIndex;
+                return (totalItemCount-PAGINATION_UPPER_LIMIT_COEF) == lastVisibleIndex;
             case RecyclerView.SCROLL_STATE_SETTLING:
                 return false;
             case RecyclerView.SCROLL_STATE_IDLE:
@@ -181,7 +177,6 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_search){
             ApplicationManager.getInstance().getRepoContainer().setInSearchMode(true);
-            listViewBinding.swipeToRefresh.setEnabled(false);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -191,18 +186,14 @@ public class RepoListActivity extends BaseActivity implements AppBarLayout.OnOff
         super.onDestroy();
     }
 
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        listViewBinding.swipeToRefresh.setEnabled(verticalOffset == 0);
-    }
 
     @Override
     protected void promptMessageViaSnackBar(UIConstants.WarningType warningType) {
         if(warningType == UIConstants.WarningType.REPO_REQUEST_FAILED){
-            UIErrorHandler.showSnackBar(listViewBinding.swipeToRefresh, getResources().
+            UIErrorHandler.showSnackBar(listViewBinding.reposRecyclerView, getResources().
                     getString(R.string.add_repo_warning_text), true, false );
         } else if(warningType == UIConstants.WarningType.NO_INTERNET_CONNECTION){
-            UIErrorHandler.showSnackBar(listViewBinding.swipeToRefresh, getResources().
+            UIErrorHandler.showSnackBar(listViewBinding.reposRecyclerView, getResources().
                     getString(R.string.no_connection_warning_text), true, false );
         }
     }
